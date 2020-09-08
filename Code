@@ -1,0 +1,191 @@
+//package tictactoe;
+import java.util.*;
+
+public class Main {
+    public static void table (char[][] c) {
+        System.out.println("---------");
+        for(int j = 3; j > 0; j--) {
+            System.out.print("| ");
+            for(int i = 1; i < 4; i++) {
+                System.out.print(c[i][j] + " ");
+            }
+            System.out.print("|");
+            System.out.println();
+        }
+        System.out.println("---------");
+    }
+
+    public static Boolean checkXWInsHorizontal(char[][] c) {
+        boolean f = false;
+        //horizontal
+        for(int j = 3; j > 0; j--) {
+            boolean res = true;
+            for(int i = 2; i < 4 && res; i++) {
+                res  = c[i][j] == c[1][j];
+            }
+            if(res && c[1][j] == 'X') {
+                f = true;
+                break;
+            }
+        }
+        return f;
+    }
+
+    public static Boolean checkXWinsVertical(char[][] c){
+        boolean f = false;
+        //checking Vertical Winner
+        for(int i = 1; i < 4; i++) {
+            boolean res = true;
+            for(int j = 2; j > 0 && res; j--) {
+                res = c[i][j] == c[i][3];
+            }
+            if(res && c[i][3] == 'X'){
+                f = true;
+                break;
+            }
+        }
+        return f;
+    }
+
+    public static Boolean checkXWinsDiagonal(char[][] c) {
+        boolean f = false;
+        //diagonal
+        boolean res1 = true;
+        boolean res2 = false;
+        for(int i = 2; i < 4 && res1; i++){
+            res1 = c[i][i] == c[1][1];
+        }
+        if(res1 && c[1][1] == 'X'){
+            f = true;
+        }
+
+        if(c[1][3] == c[2][2] && c[2][2] == c[3][1]) {
+            res2 = true;
+        }
+        if(res2 && c[3][1] == 'X'){
+            f = true;
+        }
+        return f;
+    }
+
+    public static Boolean checkOWinsHorizontal(char[][] c) {
+        boolean f = false;
+        //horizontal
+        for(int j = 3; j > 0; j--) {
+            boolean res = true;
+            for(int i = 2; i < 4 && res; i++) {
+                res  = c[i][j] == c[1][j];
+            }
+            if(res && c[1][j] == 'O') {
+                f = true;
+                break;
+            }
+        }
+        return f;
+    }
+
+    public static Boolean checkOWinsVertical(char[][] c){
+        boolean f = false;
+        //checking Vertical Winner
+        for(int i = 1; i < 4; i++) {
+            boolean res = true;
+            for(int j = 2; j > 0 && res; j--) {
+                res = c[i][j] == c[i][3];
+            }
+            if(res && c[i][3] == 'O'){
+                f = true;
+                break;
+            }
+        }
+        return f;
+    }
+
+    public static Boolean checkOWinsDiagonal(char[][] c) {
+        boolean f = false;
+        //diagonal
+        boolean res1 = true;
+        boolean res2 = false;
+        for(int i = 2; i < 4 && res1; i++){
+            res1 = c[i][i] == c[1][1];
+        }
+        if(res1 && c[1][1] == 'O'){
+            f = true;
+        }
+
+        if(c[1][3] == c[2][2] && c[2][2] == c[3][1]) {
+            res2 = true;
+        }
+        if(res2 && c[3][1] == 'O'){
+            f = true;
+        }
+        return f;
+    }
+
+    public static boolean checkOc(char[][] c, int k, int l) {
+        if(c[k][l] == 'X' || c[k][l] == 'O') {
+            System.out.println("This cell is occupied! Choose another one!");
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public static boolean checkRange(int k, int l) {
+        if(k > 3 || k < 1 || l > 3 || l < 1) {
+            System.out.println("Coordinates should be from 1 to 3!");
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        char[][] c = new char[4][4];
+        for(int j = 3; j > 0; j--) {
+            for(int i = 1; i < 4; i++) {
+                c[i][j] = ' ';
+            }
+        }
+        int q = 1;
+        int p = 0;
+        table(c);
+        do {
+            try {
+                System.out.print("Enter the coordinates: ");
+                String numI = sc.next();
+                String numJ = sc.next();
+                int k = Integer.parseInt(numI);
+                int l = Integer.parseInt(numJ);
+                if(checkRange(k,l)) {
+                    continue;
+                }
+                if (checkOc(c, k, l)) {
+                    continue;
+                }
+
+                if (q % 2 == 0) {
+                    p++;
+                    c[k][l] = 'O';
+                } else {
+                    c[k][l] = 'X';
+                    p++;
+                }
+                q++;
+                table(c);
+                    if(checkXWInsHorizontal(c) || checkXWinsVertical(c) || checkXWinsDiagonal(c)) {
+                        System.out.println("X wins");
+                        break;
+                    } else if(checkOWinsDiagonal(c) || checkOWinsHorizontal(c) || checkOWinsVertical(c)) {
+                        System.out.println("O wins");
+                        break;
+                    } else if(p == 9){
+                        System.out.println("Draw");
+                        break;
+                    }
+            } catch (NumberFormatException e) {
+                System.out.println("You should enter numbers!");
+            }
+        } while(p<=9);
+
+    }
+}
